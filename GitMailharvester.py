@@ -2,7 +2,6 @@
 # File name          : gitmailharvester.py
 # Author             : bl4ckarch & gr0bot
 # Date created       : 6 feb 2024
-
 import sys
 import argparse
 import requests
@@ -11,7 +10,7 @@ import json
 import logging
 import webbrowser
 import os
-import progressbar 
+import progressbar  
 from rich.console import Console
 from rich.logging import RichHandler
 from rich.text import Text
@@ -59,7 +58,6 @@ def get_repos(service, name, entity_type, token, debug=False):
         headers = {'Authorization': f'token {token}'} if token else {}
         repos_data = make_api_call(api_url, headers, debug)
         if repos_data is not None:
-        
             pop_valid("⚙️ Fetching repositories...")
             with progressbar.ProgressBar(max_value=len(repos_data)) as bar:
                 for i, repo in enumerate(repos_data):
@@ -107,7 +105,6 @@ def write_to_txt(data, filename):
 
 def create_html(data, filename, entity_name):
     logo_url = "https://avatars.githubusercontent.com/u/166144105?s=200&v=4"
-    
     current_date = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     
     html_content = f"""
@@ -191,7 +188,7 @@ def create_html(data, filename, entity_name):
         </div>
         <div class="content">
             <table>
-              <thead>
+                <thead>
                     <tr><th>Name</th><th>Email</th></tr>
                 </thead>
                 <tbody>
@@ -210,12 +207,12 @@ def create_html(data, filename, entity_name):
     </html>
     """
     
-        with open(filename, 'w') as htmlfile:
+    with open(filename, 'w') as htmlfile:
         htmlfile.write(html_content)
     
-        abs_path = os.path.abspath(filename)
+    abs_path = os.path.abspath(filename)
     
-        webbrowser.open(f'file://{abs_path}')
+    webbrowser.open(f'file://{abs_path}')
 
 
 def deduplicate_commiters(commiters):
@@ -239,21 +236,21 @@ def main():
     
     args = parser.parse_args()
 
-        if args.debug:
+    if args.debug:
         logging.basicConfig(level=logging.DEBUG, handlers=[RichHandler()])
     else:
         logging.basicConfig(level=logging.INFO, handlers=[RichHandler()])
 
-        if not args.username and not args.organisation:
+    if not args.username and not args.organisation:
         pop_err("⛔ Either --username or --organisation must be provided.")
     
-        entity_type = 'user' if args.username else 'org'
+    entity_type = 'user' if args.username else 'org'
     name = args.username if args.username else args.organisation
     token = args.github_token
 
-        pop_valid("⚙️ Now searching for emails...")
+    pop_valid("⚙️ Now searching for emails...")
 
-        repos = get_repos(args.service, name, entity_type, token, args.debug)
+    repos = get_repos(args.service, name, entity_type, token, args.debug)
     if not repos:
         pop_err(f"⛔ No repositories found for {name}.")
 
@@ -265,9 +262,11 @@ def main():
     if not commiters:
         pop_err(f"⚠️ No commit data found for {name}.")
 
-        unique_commiters = deduplicate_commiters(commiters)
+    
+    unique_commiters = deduplicate_commiters(commiters)
 
-        output_filename_base = f"{name}_emails"
+    
+    output_filename_base = f"{name}_emails"
     write_to_csv(unique_commiters, f"{output_filename_base}.csv")
     pop_valid(f"✅ Data written to {output_filename_base}.csv")
 
@@ -277,7 +276,8 @@ def main():
     write_to_txt(unique_commiters, f"{output_filename_base}.txt")
     pop_valid(f"✅ Data written to {output_filename_base}.txt")
 
-        create_html(unique_commiters, "output.html", name)
+    
+    create_html(unique_commiters, "output.html", name)
     pop_valid("✅ HTML report created and opened in browser.")
 
 if __name__ == '__main__':
