@@ -33,7 +33,7 @@ def pop_info(text):
     logger.info(text)
 
 def pop_valid(text):
-    console.print(f"✅ [bold green]{text}[/bold green]")
+    console.print(f"[bold green]{text}[/bold green]")
 
 def make_api_call(url, headers=None, debug=False):
     if debug:
@@ -60,7 +60,7 @@ def get_repos(service, name, entity_type, token, debug=False):
         repos_data = make_api_call(api_url, headers, debug)
         if repos_data is not None:
         
-            pop_valid("Fetching repositories...")
+            pop_valid("⚙️ Fetching repositories...")
             with progressbar.ProgressBar(max_value=len(repos_data)) as bar:
                 for i, repo in enumerate(repos_data):
                     repos.append(repo['name'])
@@ -251,7 +251,7 @@ def main():
     name = args.username if args.username else args.organisation
     token = args.github_token
 
-        pop_valid("Now searching for emails...")
+        pop_valid("⚙️ Now searching for emails...")
 
         repos = get_repos(args.service, name, entity_type, token, args.debug)
     if not repos:
@@ -259,7 +259,7 @@ def main():
 
     commiters = []
     for repo in repos:
-        pop_valid(f"Fetching commits for repository '{repo}'...")
+        pop_valid(f"⚙️ Fetching commits for repository '{repo}'...")
         commiters.extend(get_commits(args.service, name, repo, token, args.debug))
 
     if not commiters:
@@ -269,16 +269,16 @@ def main():
 
         output_filename_base = f"{name}_emails"
     write_to_csv(unique_commiters, f"{output_filename_base}.csv")
-    pop_valid(f"Data written to {output_filename_base}.csv")
+    pop_valid(f"✅ Data written to {output_filename_base}.csv")
 
     write_to_json(unique_commiters, f"{output_filename_base}.json")
-    pop_valid(f"Data written to {output_filename_base}.json")
+    pop_valid(f"✅ Data written to {output_filename_base}.json")
 
     write_to_txt(unique_commiters, f"{output_filename_base}.txt")
-    pop_valid(f"Data written to {output_filename_base}.txt")
+    pop_valid(f"✅ Data written to {output_filename_base}.txt")
 
         create_html(unique_commiters, "output.html", name)
-    pop_valid("HTML report created and opened in browser.")
+    pop_valid("✅ HTML report created and opened in browser.")
 
 if __name__ == '__main__':
     banner_text = """
@@ -293,5 +293,5 @@ if __name__ == '__main__':
     Made with ❤️  by @gr0bot and @bl4ckarch
     """
     console.print(Text(banner_text, style="cyan"))
-    pop_valid("Gitmail Harvester started...")
+    pop_valid("✅ Gitmail Harvester started...")
     main()
