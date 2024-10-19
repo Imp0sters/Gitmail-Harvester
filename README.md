@@ -29,7 +29,7 @@ Gitmail Harvester is a powerful OSINT/Red Team and Pentest tool designed to extr
 Clone this repository to your local machine using:
 
 ```bash
-git clone https://github.com/gr0bot/Gitmail-Harvester/
+git clone https://github.com/Imp0sters/Gitmail-Harvester/
 cd Gitmail-Harvester
 ```
 
