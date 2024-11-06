@@ -1,2 +1,2 @@
 requests
-progessbar2
+progressbar2
